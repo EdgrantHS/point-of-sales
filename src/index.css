@@ -1,4 +1,84 @@
-@import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
+/* Importing Bootstrap CSS */
+@import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
-/* Variabeles */
+/* Variables */
+:root {
+  --nav-bg-color: #EEEEEE;
+  --nav-text-color: #343A40;
+  --main-bg-color: #ccc;
+  --main-header-color: lightblue;
+  --main-text-color: #343A40;
+  --main-button-color: #343A40;
+  --global-white: #fff;
+  --bg-color-light: #eee;
+}
 
+/* index */
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.button-size {
+  font-size: 20px;
+}
+
+.nav-text-color {
+  color: var(--nav-text-color);
+}
+
+nav {
+  background-color: var(--nav-bg-color);
+}
+
+.custom-dropdown {
+  left: auto;
+  right: 0;
+  transform: translate3d(0px, 38px, 0px);
+}
+
+.main-color {
+  background-color: var(--bg-color-light);
+  min-height: auto;
+  padding-bottom: 15px;
+  border-radius: 15px;
+}
+
+.header-color {
+  border-radius: 15px 15px 0 0;
+  background-color: var(--main-header-color);
+}
+
+.card-size {
+  width: 12rem;
+}
+
+.main {
+  background-color: var(--main-bg-color);
+  min-height: 100vh;
+  color: var(--main-text-color);
+}
+
+.btn.custom-button {
+  background-color: var(--main-button-color);
+  color: var(--global-white);
+}
+
+.btn.custom-button:hover {
+  background-color: #2e2e2e;
+  /* Darkened version of --main-button-color, since CSS doesn't support darken function */
+}
+
+.rounded-table {
+  border-radius: 15px;
+  overflow: hidden;
+}

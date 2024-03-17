@@ -49,24 +49,31 @@ class App extends React.Component {
   }
 
   handleAdd() {
-    // console.log(this.state.addName, this.state.addCategory, this.state.addPrice, this.state.addQuantity);
+    // Ensure the state values are correctly parsed as numbers
     const name = String(this.state.addName);
-    const price = parseInt(this.state.addPrice);
+    const price = parseFloat(this.state.addPrice);
     const category = String(this.state.addCategory);
-    const stock = parseInt(this.state.addQuantity);
+    const stock = parseInt(this.state.addQuantity, 10);
 
-    axios.post('https://heeve-api.000webhostapp.com/api/item/add', [{
-      name: name, 
-      price: price,
-      category: category,
-      stock: stock,
-    }])
-      .then(response => {
-        console.log(response)
+    // Only proceed if price and stock are valid numbers
+    if (!isNaN(price) && !isNaN(stock)) {
+      const item = { name, price, category, stock }
+      axios.post('https://heeve-api.000webhostapp.com/api/item/add', [item], {
+        headers: {
+          'Content-Type': 'text/plain' 
+        }
       })
-      .catch(error => console.error('Error:', error));
+        .then(response => {
+          console.log(response);
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
 
-    console.log(name, price, category, stock);
+      console.log({ name, price, category, stock });
+    } else {
+      console.error('Invalid input: Price and stock must be numbers.');
+    }
   }
 
   handleInputChange(event) {

@@ -16,19 +16,27 @@ class App extends React.Component {
       addStatus: "",
       addPrice: "",
       addQuantity: "",
-      data: []
+      data: [],
+      currentPage: 1
     }
 
-    this.handleClick = this.handleClick.bind(this);
+    this.handleRefresh = this.handleRefresh.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleAdd = this.handleAdd.bind(this);
+    this.handlePagination = this.handlePagination.bind(this);
+    this.paginationLogic = this.paginationLogic.bind(this);
+    this.handleGetAll = this.handleGetAll.bind(this);
   }
 
   componentDidMount() {
     this.setLastUpdated(this.props.newTime);
+    // this.handleGetAll();
+    this.handleRefresh();
+  }
 
-    axios.get('https://heeve-api.000webhostapp.com/api/item/all')
+  async handleGetAll() {
+    await axios.get('https://heeve-api.000webhostapp.com/api/item/all')
       .then(response => {
         this.setState({ data: response.data.data })
         // console.log(response.data.data)
@@ -36,19 +44,36 @@ class App extends React.Component {
       .catch(error => console.error('Error:', error));
   }
 
+
   setLastUpdated(value) {
     this.setState({
       lastUpdated: value
     })
   }
 
-  handleClick() {
-    // api refresh data
+  handleRefresh() {
+    this.handlePagination(0)
+
     const now = new Date()
-    this.setLastUpdated("PERLU API: " + now.toLocaleString())
+    this.setLastUpdated(now.toLocaleString())
   }
 
-  handleAdd() {
+  async handlePagination(page){
+    let size = 10
+    await axios.get('https://heeve-api.000webhostapp.com/api/item/paged?page=' + page + '&pageSize=' + size) 
+      .then(response => {
+        this.setState({ data: response.data.data })})
+      .catch(error => console.error('Error:', error));
+  }
+
+  paginationLogic(pageChange){
+    const updatedPage = this.state.currentPage + pageChange;
+    this.setState({ currentPage: updatedPage });
+
+    this.handlePagination(updatedPage);
+  }
+
+  async handleAdd() {
     // Ensure the state values are correctly parsed as numbers
     const name = String(this.state.addName);
     const price = parseFloat(this.state.addPrice);
@@ -58,10 +83,10 @@ class App extends React.Component {
     // Only proceed if price and stock are valid numbers
     if (!isNaN(price) && !isNaN(stock)) {
       const item = { name, price, category, stock }
-      axios.post('https://heeve-api.000webhostapp.com/api/item/add', [item], {
-        headers: {
-          'Content-Type': 'text/plain' 
-        }
+      await axios.post('https://heeve-api.000webhostapp.com/api/item/add', [item], {
+        headers : {
+          'Content-Type': 'application/json'
+        },
       })
         .then(response => {
           console.log(response);
@@ -97,7 +122,7 @@ class App extends React.Component {
               <h2 className='lead last-updated' id='last-updated'>{this.state.lastUpdated}</h2>
             </div>
             <div className="col-6">
-              <button className="btn btn-lg custom-button float-end py-3" onClick={this.handleClick}>Refresh</button>
+              <button className="btn btn-lg custom-button float-end py-3" onClick={this.handleRefresh}>Refresh</button>
             </div>
           </div>
           <div className="row gx-5 pt-5">
@@ -155,16 +180,18 @@ class App extends React.Component {
                   <nav aria-label="Page navigation">
                     <ul class="pagination">
                       <li class="page-item">
-                        <button class="page-link" aria-label="Previous">
+                        <button class="page-link" aria-label="Previous" onClick={() => this.paginationLogic(-1)}>
                           <span aria-hidden="true">«</span>
                         </button>
                       </li>
                       
-                      <li class="page-item"><button class="page-link">1</button></li>
+                      {/* TODO: buat pagination angka page */}
+                      {/* <li class="page-item"><button class="page-link">1</button></li>
                       <li class="page-item"><button class="page-link">2</button></li>
-                      <li class="page-item"><button class="page-link">3</button></li>
+                      <li class="page-item"><button class="page-link">3</button></li> */}
+                      <li class="page-link">{this.state.currentPage}</li>
                       <li class="page-item">
-                        <button class="page-link" aria-label="Next">
+                        <button class="page-link" aria-label="Next" onClick={() => this.paginationLogic(1)}>
                           <span aria-hidden="true">»</span>
                         </button>
                       </li>

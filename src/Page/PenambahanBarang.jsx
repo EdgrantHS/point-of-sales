@@ -1,5 +1,6 @@
 import React from "react";
 import Box from "../Component/box";
+import BeliRow from "../Component/BeliRow";
 
 export default class PenambahanBarang extends React.Component {
   render(){
@@ -7,8 +8,14 @@ export default class PenambahanBarang extends React.Component {
       <div className="container">
         <div className="row g-5 py-5">
           <div className="col-md-8">
-            <Box header="Tambah Barang" items={[]}></Box> 
+            <Box header="Tambah Barang" items={[
+              <BeliRow nama="Baju" harga="100000" jumlah="2"/>,
+              <BeliRow nama="Baju" harga="100000" jumlah="2"/>,
+              <BeliRow nama="Baju" harga="100000" jumlah="2"/>,
+              <BeliRow nama="Baju" harga="100000" jumlah="2"/>,
+            ]}></Box> 
           </div>
+
           <div className="col-md-4">
             <Box header="Rekap" items={[
               <p><b>Value Total:</b> Rp.800.000</p>,

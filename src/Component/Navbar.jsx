@@ -19,27 +19,28 @@ function Navbar() {
             </a>
           </div>
           <div className='col-4 col-md-3' />
+          {/* TODO: Buat cards */}
           <div className='col-4'>
             {/* link */}
             <div className='row align-items-center'>
               {/* muncul di large screen */}
-              <div className='col-xl-3 d-md-block d-none'>
+              {/* <div className='col-xl-3 d-md-block d-none'>
                 <a
                   className='button-size nav-link btn btn-lg nav-text-color'
                   href='/belajar_web/inventory'
                 >
-                  Inventory Dashboard
+                  Cards
                 </a>
-              </div>
-              <div className='col-xl-3 d-md-block d-none'>
+              </div> */}
+              <div className='col-xl-4 d-md-block d-none'>
                 <a
                   className='button-size nav-link btn btn-lg nav-text-color'
-                  href='/belajar_web/Dashboard'
+                  href='/belajar_web'
                 >
                   Dashboard
                 </a>
               </div>
-              <div className='col-xl-3 d-md-block d-none'>
+              <div className='col-xl-4 d-md-block d-none'>
                 <a
                   className='button-size nav-link btn btn-lg nav-text-color'
                   href='/belajar_web/penambahan'
@@ -47,7 +48,7 @@ function Navbar() {
                   Beli Barang
                 </a>
               </div>
-              <div className='col-xl-3 d-md-block d-none'>
+              <div className='col-xl-4 d-md-block d-none'>
                 <a
                   className='button-size nav-link btn btn-lg nav-text-color'
                   href='/belajar_web/print'

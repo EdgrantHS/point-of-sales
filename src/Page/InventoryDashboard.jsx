@@ -36,7 +36,7 @@ class App extends React.Component {
   }
 
   async handleGetAll() {
-    await axios.get('https://heeveapi.mooo.com/api/item/all')
+    await axios.get('http://heeveapi.mooo.com/api/item/all')
       .then(response => {
         this.setState({ data: response.data.data })
         // console.log(response.data.data)
@@ -60,7 +60,7 @@ class App extends React.Component {
 
   async handlePagination(page){
     let size = 10
-    await axios.get('https://heeveapi.mooo.com/api/item/paged?page=' + page + '&pageSize=' + size) 
+    await axios.get('http://heeveapi.mooo.com/api/item/paged?page=' + page + '&pageSize=' + size) 
       .then(response => {
         this.setState({ data: response.data.data })})
       .catch(error => console.error('Error:', error));
@@ -93,7 +93,7 @@ class App extends React.Component {
 
       await axios.post('http://heeveapi.mooo.com/api/item/add', data, {
         headers : {
-          'Content-Type': 'application/json; charset=UTF-8',
+          'Content-Type': 'application/json',
         },
       })
         .then(response => {

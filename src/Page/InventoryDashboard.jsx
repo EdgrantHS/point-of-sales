@@ -36,7 +36,7 @@ class App extends React.Component {
   }
 
   async handleGetAll() {
-    await axios.get('https://heeve-api.000webhostapp.com/api/item/all')
+    await axios.get('https://heeveapi.mooo.com/api/item/all')
       .then(response => {
         this.setState({ data: response.data.data })
         // console.log(response.data.data)
@@ -60,7 +60,7 @@ class App extends React.Component {
 
   async handlePagination(page){
     let size = 10
-    await axios.get('https://heeve-api.000webhostapp.com/api/item/paged?page=' + page + '&pageSize=' + size) 
+    await axios.get('https://heeveapi.mooo.com/api/item/paged?page=' + page + '&pageSize=' + size) 
       .then(response => {
         this.setState({ data: response.data.data })})
       .catch(error => console.error('Error:', error));
@@ -82,10 +82,18 @@ class App extends React.Component {
 
     // Only proceed if price and stock are valid numbers
     if (!isNaN(price) && !isNaN(stock)) {
-      const item = { name, price, category, stock }
-      await axios.post('https://heeve-api.000webhostapp.com/api/item/add', [item], {
+      const item = { 
+        "name": name, 
+        "price": price, 
+        "category": category, 
+        "stock": stock 
+      }
+
+      const data = JSON.stringify([item])
+
+      await axios.post('http://heeveapi.mooo.com/api/item/add', data, {
         headers : {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json; charset=UTF-8',
         },
       })
         .then(response => {

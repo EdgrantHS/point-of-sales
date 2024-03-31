@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom/client';
+import { useState } from 'react';
 import './index.css';
 import Navbar from './Component/Navbar'
 import InventoryDashboard from './Page/InventoryDashboard';
@@ -12,6 +13,19 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
+
+// const [saved, setSaved] = useState([
+//   { 
+//     "name": "", 
+//     "price": 0, 
+//     "category": "", 
+//     "stock": 0 
+//   },
+// ])
+
+// handleAdd = (nama, price, category, stock) => {
+  
+// }
 
 const BrowserRouter = createBrowserRouter([
   {

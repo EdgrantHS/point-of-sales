@@ -17,24 +17,29 @@ export default function MyVerticallyCenteredModal(props) {
   const [quantity, setQuantity] = useState(item ? item.stock : '');
 
   async function handleEdit(id) {
-    const name = String(name);
-    const price = parseFloat(price);
-    const category = String(category);
-    const stock = parseInt(quantity, 10);
+    const tempname = String(name);
+    const tempprice = parseFloat(price);
+    const tempcategory = String(category);
+    const tempstock = parseInt(quantity, 10);
+
+    console.log("1" + { tempname, tempprice, tempcategory, tempstock });
 
     // Only proceed if price and stock are valid numbers
-    if (!isNaN(price) && !isNaN(stock)) {
+    if (!isNaN(tempprice) && !isNaN(tempstock)) {
       const item = {
-        "id": id,
-        "name": name,
-        "price": price,
-        "category": category,
-        "stock": stock
+        "name": tempname,
+        "price": tempprice,
+        "category": tempcategory,
+        "stock": tempstock
       }
 
-      const data = JSON.stringify([item])
+      console.log("2" + { tempname, tempprice, tempcategory, tempstock });
 
-      await axios.post('http://heeveapi.mooo.com/api/item/update', data, {
+      const data = JSON.stringify(item)
+
+      console.log("3" + data);
+
+      await axios.put('http://heeveapi.mooo.com/api/item/update/' + id, data, {
         // !Cek api ke yg bener atau gak
         headers: {
           'Content-Type': 'application/json',
@@ -51,6 +56,16 @@ export default function MyVerticallyCenteredModal(props) {
     } else {
       console.error('Invalid input: Price and stock must be numbers.');
     }
+  }
+
+  async function handleDelete(id) {
+    await axios.delete('http://heeveapi.mooo.com/api/item/delete/' + id)
+      .then(response => {
+        console.log(response);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
   }
 
   useEffect(() => {
@@ -95,15 +110,15 @@ export default function MyVerticallyCenteredModal(props) {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <p>ID: {item.id}</p>
+        <p>ID: {item?.id}</p>
         <InputPair label='Name' value={name} onChange={handleInputChange('name')} />
         <InputPair label='Price' value={price} onChange={handleInputChange('price')} />
         <InputPair label='Category' value={category} onChange={handleInputChange('category')} />
         <InputPair label='Stock' value={quantity} onChange={handleInputChange('quantity')} />
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={props.onHide} className='btn-danger'>Delete</Button>
-        <Button onClick={() => this.handleInputChange} className='btn-primary'>Edit</Button>
+        <Button onClick={() => handleDelete(item.id)} className='btn-danger'>Delete</Button>
+        <Button onClick={() => handleEdit(item.id)} className='btn-primary'>Edit</Button>
       </Modal.Footer>
     </Modal>
   );

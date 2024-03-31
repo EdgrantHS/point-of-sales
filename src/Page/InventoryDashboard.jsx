@@ -1,6 +1,7 @@
 import React from 'react';
 import Box from '../Component/box';
 import InputPair from '../Component/InputPair';
+import MyVerticallyCenteredModal from '../Component/Modal';
 import axios from 'axios';
 
 class App extends React.Component {
@@ -19,6 +20,8 @@ class App extends React.Component {
       data: [],
       currentPage: 1,
       maxPage: 1,
+      modalShow: false,
+      selectedItem: null, // Add this line
     }
 
     this.handleRefresh = this.handleRefresh.bind(this);
@@ -28,59 +31,31 @@ class App extends React.Component {
     this.handlePagination = this.handlePagination.bind(this);
     this.paginationLogic = this.paginationLogic.bind(this);
     this.handleGetAll = this.handleGetAll.bind(this);
-    this.handleEdit = this.handleEdit.bind(this);
+    this.handleEditClick = this.handleEditClick.bind(this);
   }
+
 
   componentDidMount() {
     this.setLastUpdated(this.props.newTime);
     this.handleRefresh();
   }
 
-  async handleEdit(id) {
-    const name = String(this.state.addName);
-    const price = parseFloat(this.state.addPrice);
-    const category = String(this.state.addCategory);
-    const stock = parseInt(this.state.addQuantity, 10);
-
-    // Only proceed if price and stock are valid numbers
-    if (!isNaN(price) && !isNaN(stock)) {
-      const item = { 
-        "id" : id,
-        "name": name, 
-        "price": price, 
-        "category": category, 
-        "stock": stock 
-      }
-
-      const data = JSON.stringify([item])
-
-      await axios.post('http://heeveapi.mooo.com/api/item/update', data, {
-        // !Cek api ke yg bener atau gak
-        headers : {
-          'Content-Type': 'application/json',
-        },
-      })
-        .then(response => {
-          console.log(response);
-        })
-        .catch(error => {
-          console.error('Error:', error);
-        });
-
-      // console.log({ name, price, category, stock });
-    } else {
-      console.error('Invalid input: Price and stock must be numbers.');
-    } 
-  }
-
   async handleGetAll() {
     await axios.get('http://heeveapi.mooo.com/api/item/all')
       .then(response => {
         this.setState({ data: response.data.data })
-        console.log(response.data.data)
+        // console.log(response.data.data)
       })
       .catch(error => console.error('Error:', error));
   }
+
+  handleEditClick = (data) => () => {
+    this.setState({
+      selectedItem: data,
+      modalShow: true
+    });
+  }
+
 
   setLastUpdated(value) {
     this.setState({
@@ -136,13 +111,13 @@ class App extends React.Component {
         },
       })
         .then(response => {
-          console.log(response);
+          // console.log(response);
         })
         .catch(error => {
           console.error('Error:', error);
         });
 
-      console.log({ name, price, category, stock });
+      // console.log({ name, price, category, stock });
     } else {
       console.error('Invalid input: Price and stock must be numbers.');
     }
@@ -213,13 +188,17 @@ class App extends React.Component {
                     </thead>
                     <tbody>
                       {this.state.data.map((data, index) => (
-                        <tr key={data.name + index}> 
+                        <tr key={data.name + index}>
                           <td>{data.name}</td>
                           <td>{data.category}</td>
                           <td>{data.price}</td>
                           <td>{data.stock}</td>
-                          <td onClick={() => this.handleEdit(data.id)}>Edit</td> 
-                          {/* !Cek data.id bener gak */}
+                          <td><b className='text-primary' onClick={this.handleEditClick(data)}>Edit</b></td>
+                          <MyVerticallyCenteredModal
+                            show={this.state.modalShow}
+                            onHide={() => this.setState({ modalShow: false })}
+                            item={this.state.selectedItem} // Pass the selectedItem state as props
+                          />
                         </tr>
                       ))}
                     </tbody>

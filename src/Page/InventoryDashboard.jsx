@@ -84,7 +84,16 @@ class App extends React.Component {
     const updatedPage = this.state.currentPage + pageChange;
     this.setState({ currentPage: updatedPage });
 
-    this.handlePagination(updatedPage);
+    //handle over limit
+    if(updatedPage < 1){
+      this.setState({ currentPage: 1 });
+    }
+    else if(updatedPage > this.state.maxPage + 1){
+      this.setState({ currentPage: this.state.maxPage + 1 });
+    }
+    else {
+      this.handlePagination(updatedPage);
+    }
   }
 
   async handleAdd() {
@@ -121,6 +130,15 @@ class App extends React.Component {
     } else {
       console.error('Invalid input: Price and stock must be numbers.');
     }
+
+
+    // reset input fields
+    this.setState({
+      addName: "",
+      addCategory: "",
+      addPrice: "",
+      addQuantity: ""
+    });
   }
 
   handleInputChange(event) {
